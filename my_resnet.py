@@ -18,6 +18,10 @@ class BasicBlock(nn.Module):
         
         # really stride doesn't depend on it
         # self.stride = int(inside_channels / in_channels)
+        # relu before addition
+        # There are another residual block types: 
+        # e.g. full-pre-activation BN-> ReLU->conv->BN-> ReLU->conv
+        # see https://towardsdatascience.com/an-overview-of-resnet-and-its-variants-5281e2f56035
         self.stride = stride
         
         # actually you don't need ReLU as field here, moreover 2
@@ -49,6 +53,7 @@ class BasicBlock(nn.Module):
         out = self.relu1(out)
         out = self.conv2(out)
         out = self.bn2(out)
+        out = self.relu2(out)
         
         if self.stride != 1:
             inp = self.downsample(inp)
